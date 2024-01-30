@@ -1,0 +1,125 @@
+version: '3'
+
+services:
+  chat-demo:
+    build:
+      context: ./chat
+      dockerfile: ./Dockerfile
+    ports:
+      - "8099:8099"
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.100
+
+  db-rabbit:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db-rabbit'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - "3309:3306"
+    volumes:
+      - my-db-rabbit:/var/lib/mysql
+    networks:
+      demo_net:
+        ipv4_address: 172.30.1.2
+
+  db-device:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db-device'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - "3308:3306"
+    volumes:
+      - my-db-device:/var/lib/mysql
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.4
+
+  db-user:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db-user'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - "3307:3306"
+    volumes:
+      - my-db-user:/var/lib/mysql
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.2
+
+  spring-demo-rabbit:
+    build:
+      context: ./DS2023_30242_Marinescu_Roxana_Backend2
+      dockerfile: ./Dockerfile
+    ports:
+      - "8091:8090"
+    environment:
+      - DB_IP=db-rabbit
+      - DB_PORT=3306
+      - DB_DBNAME=db-rabbit
+      - DB_USER=root
+      - DB_PASSWORD=admin
+    networks:
+      demo_net:
+        ipv4_address: 172.30.1.3
+
+  spring-demo-device:
+    build:
+      context: ./DS2023_30242_Marinescu_Roxana_Backend1
+      dockerfile: ./Dockerfile
+    ports:
+      - "8087:8081"
+    environment:
+      - DB_IP=db-device
+      - DB_PORT=3306
+      - DB_DBNAME=db-device
+      - DB_USER=root
+      - DB_PASSWORD=admin
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.5
+
+  spring-demo-user:
+    build:
+      context: ./DS2023_30242_Marinescu_Roxana_Backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8088:8080"
+    environment:
+      - DB_IP=db-user
+      - DB_PORT=3306
+      - DB_DBNAME=db-user
+      - DB_USER=root
+      - DB_PASSWORD=admin
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.3
+
+  react:
+    build:
+      context: ./DS2023_30242_Marinescu_Roxana_Frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKENDU=172.30.0.3
+      - BACKENDD=172.30.0.5
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.10
+
+volumes:
+  my-db:
+  my-db-rabbit:
+  my-db-device:
+  my-db-user:
+
+networks:
+  demo_net:
+    external: true

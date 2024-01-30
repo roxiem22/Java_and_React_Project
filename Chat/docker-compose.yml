@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  chat-demo:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "8099:8099"
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.100
+
+networks:
+  demo_net:
+    external: true

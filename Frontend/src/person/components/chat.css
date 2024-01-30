@@ -1,0 +1,24 @@
+.main {
+    margin-top: 20px;
+}
+
+.chat-message {
+    background-color: #e0f7fa;
+    border: 1px solid #bdbdbd;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.chat-send {
+    margin-top: 10px;
+}
+
+.typing-indicator {
+    font-style: italic;
+    color: #757575;
+    margin-top: 5px;
+}
+
